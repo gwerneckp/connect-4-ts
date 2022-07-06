@@ -2,7 +2,6 @@ import { createServer } from "http";
 import { Server, Socket } from "socket.io";
 
 import { Game, Player } from "./connect_4";
-const game = new Game();
 
 const httpServer = createServer();
 const io = new Server(httpServer);
@@ -43,9 +42,9 @@ const removeAndReassign = (socket: Socket): string => {
   return "";
 };
 
+let game = new Game();
 io.on("connection", (socket: Socket) => {
   console.log(socket.id, "joined as", assingPlayer(socket));
-  console.log(players);
   io.emit("game", players, game);
   socket.on("game", (column) => {
     let player = getPlayer(socket);
@@ -56,7 +55,10 @@ io.on("connection", (socket: Socket) => {
   });
   socket.on("disconnect", () => {
     console.log(socket.id, "disconnected from", removeAndReassign(socket));
-    console.log(players);
+    io.emit("game", players, game);
+  });
+  socket.on("newRequest", () => {
+    game = new Game();
     io.emit("game", players, game);
   });
 });

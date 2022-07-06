@@ -1,8 +1,9 @@
-import { io, Socket } from "socket.io-client";
+type Player = "A" | "B";
+type Block = Player | "Empty" | "Null";
 
+import { io, Socket } from "socket.io-client";
 // @ts-ignore
 import prompt from "prompt-async";
-import { Block } from "./connect_4";
 
 const IP_ADRESS = "localhost";
 const PORT = "3000";
@@ -61,7 +62,11 @@ socket.on("game", async (players: object, game: any) => {
   if (rightTurn(player, game.turn)) {
     prompt.start();
     const userInput = await prompt.get("column");
-    const column = userInput.column
+    const column = userInput.column - 1;
     socket.emit("game", column);
+  }
+  if (game.turn === "End") {
+    await prompt.get("Press anything to start new game");
+    socket.emit("newRequest");
   }
 });

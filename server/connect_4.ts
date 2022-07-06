@@ -19,11 +19,14 @@ export class Game {
     ["Empty", "Empty", "Empty", "Empty", "Empty", "Empty"],
   ];
 
-  turn: Player = "A";
+  turn: Player | "End" = "A";
 
   constructor() {}
 
   play(column: number, player: Player) {
+    if (this.turn === "End") {
+      return `Game has ended`;
+    }
     if (player != this.turn) {
       return `It is player ${player}'s turn.`;
     }
@@ -33,14 +36,17 @@ export class Game {
     }
     this.changeTurn();
     if (this.checkConnect(ctx.row, ctx.column)) {
-      console.log("game finished");
+      this.turn = "End";
+      return `Game over! Player ${player} is the winner.`;
     }
   }
 
   dropColumn(column: number, player: Player): BlockInfo {
     for (let i = 0; i < this.stage.length; i++) {
       if (!this.isEmpty(i, column)) {
-        console.log(`row: ${i} | column ${column} | Is Empty?: ${this.isEmpty(i, column)}`)
+        console.log(
+          `row: ${i} | column ${column} | Is Empty?: ${this.isEmpty(i, column)}`
+        );
         return false;
       }
       if (this.stage[i + 1] && !this.isEmpty(i + 1, column)) {
@@ -102,6 +108,7 @@ export class Game {
     if (this.checkPlayer(row + 1, column, player as Player)) {
       if (this.checkPlayer(row + 2, column, player as Player)) {
         if (this.checkPlayer(row + 3, column, player as Player)) {
+          console.log("1");
           return true;
         }
       }
@@ -116,48 +123,48 @@ export class Game {
     }
 
     if (this.checkPlayer(row, column + 1, player as Player)) {
-      if (this.checkPlayer(row, column + 1, player as Player)) {
-        if (this.checkPlayer(row, column + 1, player as Player)) {
+      if (this.checkPlayer(row, column + 2, player as Player)) {
+        if (this.checkPlayer(row, column + 3, player as Player)) {
           return true;
         }
       }
     }
 
     if (this.checkPlayer(row, column - 1, player as Player)) {
-      if (this.checkPlayer(row, column - 1, player as Player)) {
-        if (this.checkPlayer(row, column - 1, player as Player)) {
+      if (this.checkPlayer(row, column - 2, player as Player)) {
+        if (this.checkPlayer(row, column - 3, player as Player)) {
           return true;
         }
       }
     }
 
     if (this.checkPlayer(row + 1, column + 1, player as Player)) {
-      if (this.checkPlayer(row + 2, column + 1, player as Player)) {
-        if (this.checkPlayer(row + 3, column + 1, player as Player)) {
+      if (this.checkPlayer(row + 2, column + 2, player as Player)) {
+        if (this.checkPlayer(row + 3, column + 3, player as Player)) {
           return true;
         }
       }
     }
 
     if (this.checkPlayer(row + 1, column - 1, player as Player)) {
-      if (this.checkPlayer(row + 2, column - 1, player as Player)) {
-        if (this.checkPlayer(row + 3, column - 1, player as Player)) {
+      if (this.checkPlayer(row + 2, column - 2, player as Player)) {
+        if (this.checkPlayer(row + 3, column - 3, player as Player)) {
           return true;
         }
       }
     }
 
     if (this.checkPlayer(row - 1, column + 1, player as Player)) {
-      if (this.checkPlayer(row - 2, column + 1, player as Player)) {
-        if (this.checkPlayer(row - 3, column + 1, player as Player)) {
+      if (this.checkPlayer(row - 2, column + 2, player as Player)) {
+        if (this.checkPlayer(row - 3, column + 3, player as Player)) {
           return true;
         }
       }
     }
 
     if (this.checkPlayer(row - 1, column - 1, player as Player)) {
-      if (this.checkPlayer(row - 2, column - 1, player as Player)) {
-        if (this.checkPlayer(row - 3, column - 1, player as Player)) {
+      if (this.checkPlayer(row - 2, column - 2, player as Player)) {
+        if (this.checkPlayer(row - 3, column - 3, player as Player)) {
           return true;
         }
       }
@@ -180,6 +187,7 @@ export class Game {
           case "B":
             row += " B ";
             break;
+          default:
             break;
         }
       }

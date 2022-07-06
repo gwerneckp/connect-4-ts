@@ -67,7 +67,11 @@ socket.on("game", (players, game) => __awaiter(void 0, void 0, void 0, function*
     if (rightTurn(player, game.turn)) {
         prompt_async_1.default.start();
         const userInput = yield prompt_async_1.default.get("column");
-        const column = userInput.column;
+        const column = userInput.column - 1;
         socket.emit("game", column);
+    }
+    if (game.turn === "End") {
+        yield prompt_async_1.default.get("Press anything to start new game");
+        socket.emit("newRequest");
     }
 }));

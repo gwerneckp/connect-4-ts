@@ -15,6 +15,9 @@ class Game {
         this.turn = "A";
     }
     play(column, player) {
+        if (this.turn === "End") {
+            return `Game has ended`;
+        }
         if (player != this.turn) {
             return `It is player ${player}'s turn.`;
         }
@@ -24,7 +27,8 @@ class Game {
         }
         this.changeTurn();
         if (this.checkConnect(ctx.row, ctx.column)) {
-            console.log("game finished");
+            this.turn = "End";
+            return `Game over! Player ${player} is the winner.`;
         }
     }
     dropColumn(column, player) {
@@ -90,6 +94,7 @@ class Game {
         if (this.checkPlayer(row + 1, column, player)) {
             if (this.checkPlayer(row + 2, column, player)) {
                 if (this.checkPlayer(row + 3, column, player)) {
+                    console.log("1");
                     return true;
                 }
             }
@@ -102,43 +107,43 @@ class Game {
             }
         }
         if (this.checkPlayer(row, column + 1, player)) {
-            if (this.checkPlayer(row, column + 1, player)) {
-                if (this.checkPlayer(row, column + 1, player)) {
+            if (this.checkPlayer(row, column + 2, player)) {
+                if (this.checkPlayer(row, column + 3, player)) {
                     return true;
                 }
             }
         }
         if (this.checkPlayer(row, column - 1, player)) {
-            if (this.checkPlayer(row, column - 1, player)) {
-                if (this.checkPlayer(row, column - 1, player)) {
+            if (this.checkPlayer(row, column - 2, player)) {
+                if (this.checkPlayer(row, column - 3, player)) {
                     return true;
                 }
             }
         }
         if (this.checkPlayer(row + 1, column + 1, player)) {
-            if (this.checkPlayer(row + 2, column + 1, player)) {
-                if (this.checkPlayer(row + 3, column + 1, player)) {
+            if (this.checkPlayer(row + 2, column + 2, player)) {
+                if (this.checkPlayer(row + 3, column + 3, player)) {
                     return true;
                 }
             }
         }
         if (this.checkPlayer(row + 1, column - 1, player)) {
-            if (this.checkPlayer(row + 2, column - 1, player)) {
-                if (this.checkPlayer(row + 3, column - 1, player)) {
+            if (this.checkPlayer(row + 2, column - 2, player)) {
+                if (this.checkPlayer(row + 3, column - 3, player)) {
                     return true;
                 }
             }
         }
         if (this.checkPlayer(row - 1, column + 1, player)) {
-            if (this.checkPlayer(row - 2, column + 1, player)) {
-                if (this.checkPlayer(row - 3, column + 1, player)) {
+            if (this.checkPlayer(row - 2, column + 2, player)) {
+                if (this.checkPlayer(row - 3, column + 3, player)) {
                     return true;
                 }
             }
         }
         if (this.checkPlayer(row - 1, column - 1, player)) {
-            if (this.checkPlayer(row - 2, column - 1, player)) {
-                if (this.checkPlayer(row - 3, column - 1, player)) {
+            if (this.checkPlayer(row - 2, column - 2, player)) {
+                if (this.checkPlayer(row - 3, column - 3, player)) {
                     return true;
                 }
             }
@@ -159,6 +164,7 @@ class Game {
                     case "B":
                         row += " B ";
                         break;
+                    default:
                         break;
                 }
             }
